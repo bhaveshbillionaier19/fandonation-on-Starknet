@@ -65,7 +65,7 @@ export default function NFTCard({ nft, index = 0, onDonation, onTotalsChange }: 
         contractAddress,
         cairo.uint256(amountWei)
       );
-      await account.waitForTransaction(approveTx.transaction_hash);
+      await getProvider().waitForTransaction(approveTx.transaction_hash);
 
       // Step 2: Call donate
       const contract = new Contract({ abi: contractAbi as any, address: contractAddress, providerOrAccount: account });
@@ -73,7 +73,7 @@ export default function NFTCard({ nft, index = 0, onDonation, onTotalsChange }: 
         cairo.uint256(tokenId),
         cairo.uint256(amountWei)
       );
-      await account.waitForTransaction(donateTx.transaction_hash);
+      await getProvider().waitForTransaction(donateTx.transaction_hash);
 
       toast({
         title: "🎉 Fan Donation Successful!",

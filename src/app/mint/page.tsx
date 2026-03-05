@@ -25,7 +25,7 @@ export default function MintPage() {
   const [txHash, setTxHash] = useState<string | null>(null);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const { toast } = useToast();
-  const { account, isConnected } = useStarkNet();
+  const { account, isConnected, getProvider } = useStarkNet();
 
   const handleFileChange = (files: FileList | null) => {
     if (files && files[0]) {
@@ -88,7 +88,7 @@ export default function MintPage() {
       setTxHash(result.transaction_hash);
       
       // Wait for confirmation
-      await account.waitForTransaction(result.transaction_hash);
+      await getProvider().waitForTransaction(result.transaction_hash);
       
       setIsConfirmed(true);
       toast({
