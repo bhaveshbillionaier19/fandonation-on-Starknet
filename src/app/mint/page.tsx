@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { uploadToIPFS } from "@/lib/ipfs";
 import { useStarkNet } from "@/app/providers";
 import { contractAddress, contractAbi } from "@/constants";
-import { Contract, cairo, byteArray } from "starknet";
+import { Contract, cairo, byteArray, CallData } from "starknet";
 import { Loader2, Upload, Sparkles, Image as ImageIcon, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import Confetti from "react-confetti";
@@ -81,9 +81,18 @@ export default function MintPage() {
         throw new Error("Failed to upload to IPFS");
       }
 
-      // Call mint_nft on the StarkNet contract
-      const contract = new Contract({ abi: contractAbi as any, address: contractAddress, providerOrAccount: account });
-      const result = await contract.mint_nft(byteArray.byteArrayFromString(tokenURI));
+      // Call mint_nft on the StarkNet contract using account.execute
+      // ByteArray must be compiled via CallData to properly flatten into felts
+      const myCallData = new CallData(contractAbi as any);
+      const calldata = myCallData.compile("mint_nft", {
+        token_uri: tokenURI,
+      });
+      
+      const result = await account.execute({
+        contractAddress: contractAddress,
+        entrypoint: "mint_nft",
+        calldata: calldata,
+      });
       
       setTxHash(result.transaction_hash);
       
