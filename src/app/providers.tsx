@@ -25,7 +25,7 @@ const StarkNetContext = createContext<StarkNetContextType>({
   connectWallet: async () => {},
   disconnect: () => {},
   getProvider: () => new RpcProvider({ nodeUrl: RPC_URL }),
-  getContract: () => new Contract(contractAbi, contractAddress, new RpcProvider({ nodeUrl: RPC_URL })),
+  getContract: () => new Contract({ abi: contractAbi as any, address: contractAddress, providerOrAccount: new RpcProvider({ nodeUrl: RPC_URL }) }),
 });
 
 export function useStarkNet() {
@@ -43,7 +43,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   const getContract = useCallback(
     (signer?: AccountInterface | RpcProvider) => {
-      return new Contract(contractAbi, contractAddress, signer || getProvider());
+      return new Contract({ abi: contractAbi as any, address: contractAddress, providerOrAccount: signer || getProvider() });
     },
     [getProvider]
   );

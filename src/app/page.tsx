@@ -44,7 +44,7 @@ export default function Home() {
     
     try {
       const provider = new RpcProvider({ nodeUrl: RPC_URL });
-      const contract = new Contract(contractAbi, contractAddress, provider);
+      const contract = new Contract({ abi: contractAbi as any, address: contractAddress, providerOrAccount: provider });
 
       // Get total supply
       const totalSupplyResult = await contract.total_supply();

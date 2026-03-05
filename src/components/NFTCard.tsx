@@ -60,7 +60,7 @@ export default function NFTCard({ nft, index = 0, onDonation, onTotalsChange }: 
       const amountWei = BigInt(Math.floor(parseFloat(donationAmount) * 1e18));
 
       // Step 1: Approve STRK spending
-      const strkContract = new Contract(strkAbi, STRK_TOKEN_ADDRESS, account);
+      const strkContract = new Contract({ abi: strkAbi as any, address: STRK_TOKEN_ADDRESS, providerOrAccount: account });
       const approveTx = await strkContract.approve(
         contractAddress,
         cairo.uint256(amountWei)
@@ -68,7 +68,7 @@ export default function NFTCard({ nft, index = 0, onDonation, onTotalsChange }: 
       await account.waitForTransaction(approveTx.transaction_hash);
 
       // Step 2: Call donate
-      const contract = new Contract(contractAbi, contractAddress, account);
+      const contract = new Contract({ abi: contractAbi as any, address: contractAddress, providerOrAccount: account });
       const donateTx = await contract.donate(
         cairo.uint256(tokenId),
         cairo.uint256(amountWei)

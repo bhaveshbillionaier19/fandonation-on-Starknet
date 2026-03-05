@@ -82,7 +82,7 @@ export default function MintPage() {
       }
 
       // Call mint_nft on the StarkNet contract
-      const contract = new Contract(contractAbi, contractAddress, account);
+      const contract = new Contract({ abi: contractAbi as any, address: contractAddress, providerOrAccount: account });
       const result = await contract.mint_nft(tokenURI);
       
       setTxHash(result.transaction_hash);
