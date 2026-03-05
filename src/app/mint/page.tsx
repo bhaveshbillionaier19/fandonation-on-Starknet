@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { uploadToIPFS } from "@/lib/ipfs";
 import { useStarkNet } from "@/app/providers";
 import { contractAddress, contractAbi } from "@/constants";
-import { Contract } from "starknet";
+import { Contract, cairo, byteArray } from "starknet";
 import { Loader2, Upload, Sparkles, Image as ImageIcon, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import Confetti from "react-confetti";
@@ -83,7 +83,7 @@ export default function MintPage() {
 
       // Call mint_nft on the StarkNet contract
       const contract = new Contract({ abi: contractAbi as any, address: contractAddress, providerOrAccount: account });
-      const result = await contract.mint_nft(tokenURI);
+      const result = await contract.mint_nft(byteArray.byteArrayFromString(tokenURI));
       
       setTxHash(result.transaction_hash);
       
