@@ -81,18 +81,9 @@ export default function MintPage() {
         throw new Error("Failed to upload to IPFS");
       }
 
-      // Call mint_nft on the StarkNet contract using account.execute
-      // ByteArray must be compiled via CallData to properly flatten into felts
-      const myCallData = new CallData(contractAbi as any);
-      const calldata = myCallData.compile("mint_nft", {
-        token_uri: tokenURI,
-      });
-      
-      const result = await account.execute({
-        contractAddress: contractAddress,
-        entrypoint: "mint_nft",
-        calldata: calldata,
-      });
+      // Call mint_nft on the StarkNet contract
+      const contract = new Contract({ abi: contractAbi as any, address: contractAddress, providerOrAccount: account });
+      const result = await contract.mint_nft(tokenURI);
       
       setTxHash(result.transaction_hash);
       
