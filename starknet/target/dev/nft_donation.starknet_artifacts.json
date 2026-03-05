@@ -1,0 +1,1 @@
+{"version":1,"contracts":[{"id":"24udnsc233rne","package_name":"nft_donation","contract_name":"NFTDonation","module_path":"nft_donation::nft_donation::NFTDonation","artifacts":{"sierra":"nft_donation_NFTDonation.contract_class.json","casm":"nft_donation_NFTDonation.compiled_contract_class.json"}}]}
